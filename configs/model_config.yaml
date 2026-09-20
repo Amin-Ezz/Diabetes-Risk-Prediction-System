@@ -1,0 +1,108 @@
+# Diabetes & Hypertension Risk Prediction Configuration
+# Preserving exact architecture, preprocessing, and training configuration from research notebook
+
+random_state: 42
+
+dataset:
+  uci_id: 336
+  dataset_name: "Chronic Kidney Disease"
+  raw_csv_path: "data/raw/chronic_kidney_disease.csv"
+  train_data_path: "data/processed/train.parquet"
+  test_data_path: "data/processed/test.parquet"
+  test_size: 0.2
+
+targets:
+  diabetes:
+    source_col: "dm"
+    positive_val: "yes"
+    threshold: 0.50
+  hypertension:
+    source_col: "htn"
+    positive_val: "yes"
+    threshold: 0.39
+
+clinical_ranges:
+  age: [1, 120]
+  bp: [40, 260]
+  bgr: [30, 600]
+  bu: [1, 500]
+  sc: [0.1, 100.0]
+  sod: [100, 180]
+  pot: [1.5, 12.0]
+  hemo: [3, 25]
+  pcv: [5, 70]
+  wbcc: [1000, 100000]
+  rbcc: [1, 10]
+
+allowed_values:
+  rbc: ["normal", "abnormal"]
+  pc: ["normal", "abnormal"]
+  pcc: ["present", "notpresent"]
+  ba: ["present", "notpresent"]
+  htn: ["yes", "no"]
+  dm: ["yes", "no"]
+  cad: ["yes", "no"]
+  appet: ["good", "poor"]
+  pe: ["yes", "no"]
+  ane: ["yes", "no"]
+  class: ["ckd", "notckd"]
+
+preprocessing:
+  high_missing_cols: ["rbc", "rbcc", "wbcc", "sod", "pot", "pcv", "hemo", "bgr", "bp"]
+  quantile_transformer:
+    output_distribution: "normal"
+    n_quantiles: 300
+
+neural_network:
+  input_dim: 64
+  hidden_units: [128, 64, 32]
+  dropout_rates: [0.35, 0.25, 0.15]
+  l2_reg: 0.0003
+  learning_rate: 0.001
+  label_smoothing: 0.05
+  batch_size: 32
+  epochs: 400
+  validation_split: 0.15
+  early_stopping_patience: 40
+  reduce_lr_patience: 12
+  reduce_lr_factor: 0.5
+  min_lr: 0.000001
+
+ensemble:
+  blend_seeds: [42, 7, 123]
+  dm_xgb:
+    n_estimators: 413
+    max_depth: 4
+    learning_rate: 0.0322
+    subsample: 0.7165
+    colsample_bytree: 0.8059
+    reg_lambda: 0.1726
+    min_child_weight: 3
+    gamma: 0.3664
+  dm_lgb:
+    n_estimators: 455
+    max_depth: 4
+    learning_rate: 0.0140
+    subsample: 0.9193
+    colsample_bytree: 0.5779
+    reg_lambda: 2.2674
+    min_child_samples: 18
+    num_leaves: 20
+  htn_xgb:
+    n_estimators: 636
+    max_depth: 6
+    learning_rate: 0.0114
+    subsample: 0.9021
+    colsample_bytree: 0.7039
+    reg_lambda: 0.1677
+    min_child_weight: 6
+    gamma: 0.0238
+  htn_lgb:
+    n_estimators: 389
+    max_depth: 5
+    learning_rate: 0.0548
+    subsample: 0.9120
+    colsample_bytree: 0.5175
+    reg_lambda: 0.4093
+    min_child_samples: 20
+    num_leaves: 16

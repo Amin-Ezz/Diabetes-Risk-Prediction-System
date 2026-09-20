@@ -1,0 +1,35 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "diabetes-risk-prediction"
+version = "1.0.0"
+description = "Deep learning and ensemble system for simultaneous Diabetes and Hypertension risk assessment"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [
+    { name = "CardioMetabolic AI Team" }
+]
+dependencies = [
+    "tensorflow>=2.15.0",
+    "scikit-learn>=1.3.0",
+    "xgboost>=2.0.0",
+    "lightgbm>=4.0.0",
+    "pandas>=2.0.0",
+    "numpy>=1.24.0",
+    "streamlit>=1.30.0",
+    "pyyaml>=6.0",
+    "joblib>=1.3.0",
+    "ucimlrepo>=0.0.7",
+    "matplotlib>=3.7.0",
+    "seaborn>=0.12.0",
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]

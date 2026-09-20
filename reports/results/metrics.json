@@ -1,0 +1,74 @@
+{
+  "diabetes": {
+    "neural_network": {
+      "target": "diabetes_nn",
+      "threshold": 0.5,
+      "accuracy": 0.7875,
+      "precision": 0.6571,
+      "recall": 0.8214,
+      "f1": 0.7302,
+      "roc_auc": 0.8695,
+      "specificity": 0.7692,
+      "mcc": 0.5679,
+      "confusion": {
+        "tn": 40,
+        "fp": 12,
+        "fn": 5,
+        "tp": 23
+      }
+    },
+    "ensemble_blend": {
+      "target": "diabetes_blend",
+      "threshold": 0.5,
+      "accuracy": 0.8125,
+      "precision": 0.7241,
+      "recall": 0.75,
+      "f1": 0.7368,
+      "roc_auc": 0.9114,
+      "specificity": 0.8462,
+      "mcc": 0.5915,
+      "confusion": {
+        "tn": 44,
+        "fp": 8,
+        "fn": 7,
+        "tp": 21
+      }
+    }
+  },
+  "hypertension": {
+    "neural_network": {
+      "target": "hypertension_nn",
+      "threshold": 0.5,
+      "accuracy": 0.8125,
+      "precision": 0.7027,
+      "recall": 0.8667,
+      "f1": 0.7761,
+      "roc_auc": 0.8747,
+      "specificity": 0.78,
+      "mcc": 0.6279,
+      "confusion": {
+        "tn": 39,
+        "fp": 11,
+        "fn": 4,
+        "tp": 26
+      }
+    },
+    "ensemble_blend": {
+      "target": "hypertension_blend",
+      "threshold": 0.39,
+      "accuracy": 0.8375,
+      "precision": 0.7576,
+      "recall": 0.8333,
+      "f1": 0.7937,
+      "roc_auc": 0.9113,
+      "specificity": 0.84,
+      "mcc": 0.6622,
+      "confusion": {
+        "tn": 42,
+        "fp": 8,
+        "fn": 5,
+        "tp": 25
+      }
+    }
+  }
+}
