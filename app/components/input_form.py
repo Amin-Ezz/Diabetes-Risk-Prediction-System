@@ -95,6 +95,84 @@ def render_input_form() -> Dict[str, Any]:
 
     defaults = PRESETS.get(preset_choice, PRESETS["Normal / Low Risk"]) if preset_choice != "Custom Manual Entry" else PRESETS["Normal / Low Risk"]
 
+    # Direct styling to guarantee step buttons (+ / -) render as distinct full square boxes
+    st.markdown(
+        """
+        <style>
+            div[data-testid="stNumberInputContainer"] {
+                display: flex !important;
+                flex-direction: row !important;
+                flex-wrap: nowrap !important;
+                align-items: center !important;
+                background-color: #ffffff !important;
+                border: 1px solid #cbd5e1 !important;
+                border-radius: 8px !important;
+                padding: 3px 8px 3px 4px !important;
+                height: 44px !important;
+                min-height: 44px !important;
+                max-height: 44px !important;
+                box-sizing: border-box !important;
+                overflow: visible !important;
+            }
+            div[data-testid="stNumberInputContainer"] input {
+                background-color: transparent !important;
+                color: #0f172a !important;
+                border: none !important;
+                outline: none !important;
+                box-shadow: none !important;
+                font-weight: 500 !important;
+                font-size: 0.95rem !important;
+                padding: 4px 8px !important;
+                flex: 1 1 auto !important;
+                min-width: 0 !important;
+                width: 100% !important;
+                height: 100% !important;
+            }
+            div[data-testid="stNumberInputContainer"] > div:last-child {
+                display: inline-flex !important;
+                flex-direction: row !important;
+                align-items: center !important;
+                justify-content: flex-end !important;
+                gap: 6px !important;
+                flex-shrink: 0 !important;
+                margin-left: 6px !important;
+                height: auto !important;
+            }
+            button[data-testid="stNumberInputStepDown"],
+            button[data-testid="stNumberInputStepUp"],
+            div[data-testid="stNumberInputContainer"] button {
+                display: inline-flex !important;
+                align-items: center !important;
+                justify-content: center !important;
+                width: 30px !important;
+                min-width: 30px !important;
+                max-width: 30px !important;
+                height: 30px !important;
+                min-height: 30px !important;
+                max-height: 30px !important;
+                background-color: #f1f5f9 !important;
+                border: 1px solid #cbd5e1 !important;
+                border-radius: 6px !important;
+                color: #1e293b !important;
+                cursor: pointer !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                box-sizing: border-box !important;
+                opacity: 1 !important;
+                flex-shrink: 0 !important;
+            }
+            button[data-testid="stNumberInputStepDown"]:hover,
+            button[data-testid="stNumberInputStepUp"]:hover,
+            div[data-testid="stNumberInputContainer"] button:hover {
+                background-color: #e2e8f0 !important;
+                border-color: #94a3b8 !important;
+                color: #0f172a !important;
+            }
+        </style>
+        """,
+        unsafe_allow_html=True,
+    )
+
     with st.form("clinical_prediction_form"):
         # Section 1: Demographics & Blood Pressure
         st.markdown("#### 1. Demographics & Hemodynamics")

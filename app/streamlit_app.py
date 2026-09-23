@@ -14,7 +14,7 @@ PROJECT_ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(PROJECT_ROOT / "src"))
 
 from app.components.input_form import render_input_form
-from app.components.visualizations import render_metrics_table, render_risk_card
+from app.components.visualizations import render_feature_radar, render_metrics_table, render_risk_card
 from diabetes_prediction.predict import RiskPredictor
 
 # Page Configuration
@@ -67,11 +67,6 @@ st.markdown(
             color: #92400e;
             font-size: 0.92rem;
         }
-        /* Sidebar branding */
-        [data-testid="stSidebar"] {
-            background-color: #ffffff;
-            border-right: 1px solid #e2e8f0;
-        }
         /* Metric cards */
         div[data-testid="metric-container"] {
             background-color: white;
@@ -79,6 +74,373 @@ st.markdown(
             padding: 14px 18px;
             border-radius: 8px;
             box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+        }
+
+        /* -------------------------------------------------------------
+           PATIENT CLINICAL PARAMETERS & FORM STYLING:
+           Clean, bright white & light slate palette with high contrast
+           ------------------------------------------------------------- */
+        /* Form container */
+        [data-testid="stForm"] {
+            background-color: #ffffff !important;
+            border: 1px solid #e2e8f0 !important;
+            border-radius: 12px !important;
+            padding: 24px !important;
+            box-shadow: 0 4px 16px rgba(15, 23, 42, 0.05) !important;
+        }
+
+        /* Section headers in form */
+        [data-testid="stForm"] h4 {
+            color: #1e3a8a !important;
+            font-size: 1.05rem !important;
+            font-weight: 700 !important;
+            border-bottom: 2px solid #f1f5f9 !important;
+            padding-bottom: 8px !important;
+            margin-top: 20px !important;
+            margin-bottom: 16px !important;
+        }
+
+        /* Input Labels in main content */
+        .main [data-testid="stWidgetLabel"] p,
+        .main [data-testid="stWidgetLabel"] label {
+            color: #1e293b !important;
+            font-weight: 600 !important;
+            font-size: 0.88rem !important;
+        }
+
+        /* Number Input Container & Fields */
+        div[data-testid="stNumberInputContainer"],
+        .main div[data-testid="stNumberInputContainer"],
+        div[data-testid="stForm"] div[data-testid="stNumberInputContainer"] {
+            background-color: #ffffff !important;
+            border: 1px solid #cbd5e1 !important;
+            border-radius: 8px !important;
+            display: flex !important;
+            flex-direction: row !important;
+            flex-wrap: nowrap !important;
+            align-items: center !important;
+            padding: 3px 8px 3px 4px !important;
+            height: 44px !important;
+            min-height: 44px !important;
+            max-height: 44px !important;
+            box-sizing: border-box !important;
+            overflow: visible !important;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease !important;
+        }
+        div[data-testid="stNumberInputContainer"]:focus-within {
+            border-color: #2563eb !important;
+            box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2) !important;
+        }
+        div[data-testid="stNumberInputContainer"] input,
+        input[data-testid="stNumberInputField"] {
+            background-color: transparent !important;
+            color: #0f172a !important;
+            border: none !important;
+            outline: none !important;
+            box-shadow: none !important;
+            font-weight: 500 !important;
+            font-size: 0.95rem !important;
+            padding: 4px 8px !important;
+            flex: 1 1 auto !important;
+            min-width: 0 !important;
+            width: 100% !important;
+            height: 100% !important;
+        }
+        .main [data-testid="stTextInput"] input {
+            background-color: #ffffff !important;
+            color: #0f172a !important;
+            border: 1px solid #cbd5e1 !important;
+            border-radius: 8px !important;
+            font-weight: 500 !important;
+            font-size: 0.95rem !important;
+            padding: 8px 12px !important;
+        }
+
+        /* Step Buttons Wrapper Container */
+        div[data-testid="stNumberInputContainer"] > div:last-child {
+            display: inline-flex !important;
+            flex-direction: row !important;
+            align-items: center !important;
+            justify-content: flex-end !important;
+            gap: 6px !important;
+            flex-shrink: 0 !important;
+            margin-left: 6px !important;
+            height: auto !important;
+        }
+
+        /* Distinct Square Step Buttons (+ and -) */
+        button[data-testid="stNumberInputStepDown"],
+        button[data-testid="stNumberInputStepUp"],
+        div[data-testid="stNumberInputContainer"] button {
+            display: inline-flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            width: 30px !important;
+            min-width: 30px !important;
+            max-width: 30px !important;
+            height: 30px !important;
+            min-height: 30px !important;
+            max-height: 30px !important;
+            background-color: #f1f5f9 !important;
+            border: 1px solid #cbd5e1 !important;
+            border-radius: 6px !important;
+            color: #1e293b !important;
+            cursor: pointer !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            box-sizing: border-box !important;
+            transition: all 0.15s ease-in-out !important;
+            opacity: 1 !important;
+            flex-shrink: 0 !important;
+        }
+        button[data-testid="stNumberInputStepDown"]:hover:not(:disabled),
+        button[data-testid="stNumberInputStepUp"]:hover:not(:disabled),
+        div[data-testid="stNumberInputContainer"] button:hover:not(:disabled) {
+            background-color: #e2e8f0 !important;
+            border-color: #94a3b8 !important;
+            color: #0f172a !important;
+        }
+        button[data-testid="stNumberInputStepDown"]:active:not(:disabled),
+        button[data-testid="stNumberInputStepUp"]:active:not(:disabled),
+        div[data-testid="stNumberInputContainer"] button:active:not(:disabled) {
+            background-color: #cbd5e1 !important;
+            transform: scale(0.94) !important;
+        }
+        button[data-testid="stNumberInputStepDown"]:disabled,
+        button[data-testid="stNumberInputStepUp"]:disabled,
+        div[data-testid="stNumberInputContainer"] button:disabled {
+            opacity: 0.3 !important;
+            cursor: not-allowed !important;
+            background-color: #f8fafc !important;
+            border-color: #e2e8f0 !important;
+        }
+        div[data-testid="stNumberInputContainer"] button svg,
+        div[data-testid="stNumberInputContainer"] button span {
+            color: inherit !important;
+            fill: currentColor !important;
+            width: 14px !important;
+            height: 14px !important;
+        }
+
+        /* Selectboxes in main content (Patient Profile preset & form dropdowns) */
+        .main [data-testid="stSelectbox"] [data-baseweb="select"] > div {
+            background-color: #ffffff !important;
+            border: 1px solid #cbd5e1 !important;
+            border-radius: 8px !important;
+            color: #0f172a !important;
+        }
+        .main [data-testid="stSelectbox"] [data-baseweb="select"] span,
+        .main [data-testid="stSelectbox"] [data-baseweb="select"] div {
+            color: #0f172a !important;
+            font-weight: 500 !important;
+        }
+        .main [data-testid="stSelectbox"] [data-baseweb="select"] svg {
+            fill: #475569 !important;
+        }
+        .main [data-testid="stSelectbox"] [data-baseweb="select"] > div:hover {
+            border-color: #94a3b8 !important;
+        }
+
+        /* Submit Button */
+        [data-testid="stForm"] button[kind="primaryFormSubmit"],
+        [data-testid="stForm"] button[data-testid="baseButton-secondaryFormSubmit"],
+        [data-testid="stForm"] button {
+            background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%) !important;
+            color: #ffffff !important;
+            font-weight: 700 !important;
+            font-size: 1rem !important;
+            border: none !important;
+            border-radius: 8px !important;
+            padding: 12px 24px !important;
+            box-shadow: 0 4px 14px rgba(37, 99, 235, 0.25) !important;
+            transition: all 0.2s ease !important;
+            margin-top: 16px !important;
+        }
+        [data-testid="stForm"] button:hover {
+            background: linear-gradient(135deg, #172554 0%, #1d4ed8 100%) !important;
+            box-shadow: 0 6px 20px rgba(37, 99, 235, 0.35) !important;
+            transform: translateY(-1px);
+        }
+        [data-testid="stForm"] button p {
+            color: #ffffff !important;
+            font-weight: 700 !important;
+        }
+
+        /* -------------------------------------------------------------
+           SIDEBAR THEME: Modern Deep Navy & Slate
+           Solves text invisibility and provides high contrast & sleek design
+           ------------------------------------------------------------- */
+        [data-testid="stSidebar"],
+        [data-testid="stSidebar"] > div:first-child,
+        [data-testid="stSidebarUserContent"],
+        section[data-testid="stSidebar"] {
+            background: linear-gradient(180deg, #0b1329 0%, #0f172a 50%, #131f37 100%) !important;
+            border-right: 1px solid rgba(255, 255, 255, 0.08) !important;
+        }
+
+        /* Sidebar Header and Collapse Control */
+        [data-testid="stSidebarHeader"] {
+            background: transparent !important;
+        }
+        [data-testid="stSidebarCollapseButton"] button,
+        [data-testid="stSidebarHeader"] button,
+        [data-testid="collapsedControl"] button {
+            color: #cbd5e1 !important;
+            background: rgba(255, 255, 255, 0.06) !important;
+            border-radius: 6px !important;
+        }
+        [data-testid="stSidebarCollapseButton"] button:hover,
+        [data-testid="stSidebarHeader"] button:hover,
+        [data-testid="collapsedControl"] button:hover {
+            color: #38bdf8 !important;
+            background: rgba(56, 189, 248, 0.15) !important;
+        }
+
+        /* Sidebar Typography */
+        [data-testid="stSidebar"] h1,
+        [data-testid="stSidebar"] h2,
+        [data-testid="stSidebar"] h3,
+        [data-testid="stSidebar"] h4,
+        [data-testid="stSidebar"] h5,
+        [data-testid="stSidebar"] h6 {
+            color: #f8fafc !important;
+            font-weight: 700 !important;
+        }
+        [data-testid="stSidebar"] p,
+        [data-testid="stSidebar"] span,
+        [data-testid="stSidebar"] label,
+        [data-testid="stSidebar"] li {
+            color: #cbd5e1 !important;
+        }
+        [data-testid="stSidebar"] strong {
+            color: #f1f5f9 !important;
+        }
+
+        /* Sidebar Horizontal Dividers */
+        [data-testid="stSidebar"] hr {
+            border: none !important;
+            border-top: 1px solid rgba(255, 255, 255, 0.12) !important;
+            margin: 18px 0 !important;
+        }
+
+        /* Sidebar Navigation Radio Buttons */
+        [data-testid="stSidebar"] .stRadio > label,
+        [data-testid="stSidebar"] [data-testid="stRadio"] [data-testid="stWidgetLabel"] p {
+            color: #94a3b8 !important;
+            font-size: 0.76rem !important;
+            font-weight: 700 !important;
+            text-transform: uppercase !important;
+            letter-spacing: 0.08em !important;
+            margin-bottom: 6px !important;
+        }
+        [data-testid="stSidebar"] [data-testid="stRadio"] [role="radiogroup"] {
+            gap: 6px;
+        }
+        [data-testid="stSidebar"] [data-testid="stRadio"] [role="radiogroup"] label {
+            background: rgba(255, 255, 255, 0.04) !important;
+            border: 1px solid rgba(255, 255, 255, 0.08) !important;
+            border-radius: 8px !important;
+            padding: 8px 12px !important;
+            margin-bottom: 3px !important;
+            transition: all 0.2s ease-in-out !important;
+            cursor: pointer !important;
+            display: flex !important;
+            align-items: center !important;
+        }
+        [data-testid="stSidebar"] [data-testid="stRadio"] [role="radiogroup"] label:hover {
+            background: rgba(56, 189, 248, 0.12) !important;
+            border-color: rgba(56, 189, 248, 0.4) !important;
+        }
+        [data-testid="stSidebar"] [data-testid="stRadio"] [role="radiogroup"] label p,
+        [data-testid="stSidebar"] [data-testid="stRadio"] [role="radiogroup"] label span,
+        [data-testid="stSidebar"] [data-testid="stRadio"] [role="radiogroup"] label div {
+            color: #f1f5f9 !important;
+            font-weight: 500 !important;
+            font-size: 0.92rem !important;
+        }
+        [data-testid="stSidebar"] [data-testid="stRadio"] [role="radiogroup"] input[type="radio"] {
+            accent-color: #38bdf8 !important;
+        }
+        [data-testid="stSidebar"] [data-testid="stRadio"] [role="radiogroup"] label[data-checked="true"],
+        [data-testid="stSidebar"] [data-testid="stRadio"] [role="radiogroup"] label:has(input:checked) {
+            background: rgba(56, 189, 248, 0.18) !important;
+            border-color: #38bdf8 !important;
+            box-shadow: 0 0 12px rgba(56, 189, 248, 0.15) !important;
+        }
+
+        /* Sidebar Selectbox */
+        [data-testid="stSidebar"] [data-testid="stSelectbox"] > label,
+        [data-testid="stSidebar"] [data-testid="stSelectbox"] [data-testid="stWidgetLabel"] p {
+            color: #cbd5e1 !important;
+            font-size: 0.85rem !important;
+            font-weight: 600 !important;
+            margin-bottom: 6px !important;
+        }
+        [data-testid="stSidebar"] [data-baseweb="select"] > div {
+            background-color: #1e293b !important;
+            border: 1px solid #334155 !important;
+            border-radius: 8px !important;
+            color: #f8fafc !important;
+        }
+        [data-testid="stSidebar"] [data-baseweb="select"] span,
+        [data-testid="stSidebar"] [data-baseweb="select"] div {
+            color: #f8fafc !important;
+            font-size: 0.88rem !important;
+        }
+        [data-testid="stSidebar"] [data-baseweb="select"] svg {
+            fill: #94a3b8 !important;
+        }
+
+        /* Sidebar Custom Component Cards */
+        .sidebar-brand-card {
+            background: linear-gradient(135deg, rgba(30, 58, 138, 0.35) 0%, rgba(15, 23, 42, 0.5) 100%);
+            border: 1px solid rgba(56, 189, 248, 0.25);
+            border-radius: 10px;
+            padding: 16px;
+            margin-bottom: 16px;
+        }
+        .sidebar-brand-title {
+            margin: 0;
+            color: #38bdf8 !important;
+            font-size: 1.12rem;
+            font-weight: 800;
+            letter-spacing: -0.01em;
+        }
+        .sidebar-brand-sub {
+            margin: 4px 0 0 0;
+            color: #94a3b8 !important;
+            font-size: 0.82rem;
+        }
+        .sidebar-info-box {
+            background: rgba(15, 23, 42, 0.65);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 8px;
+            padding: 12px 14px;
+            font-size: 0.82rem;
+            color: #94a3b8;
+            line-height: 1.6;
+        }
+        .sidebar-info-box p {
+            margin: 4px 0 !important;
+            color: #94a3b8 !important;
+        }
+        .sidebar-info-box strong {
+            color: #cbd5e1 !important;
+        }
+        .sidebar-status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: #34d399 !important;
+            font-weight: 600;
+        }
+        .sidebar-status-dot {
+            width: 8px;
+            height: 8px;
+            background-color: #10b981;
+            border-radius: 50%;
+            display: inline-block;
+            box-shadow: 0 0 8px rgba(16, 185, 129, 0.7);
         }
     </style>
     """,
@@ -91,7 +453,6 @@ def get_predictor() -> RiskPredictor:
     """Load model predictor singleton from models directory."""
     model_path = PROJECT_ROOT / "models" / "multioutput_nn.keras"
     preproc_path = PROJECT_ROOT / "models" / "preprocessor.joblib"
-    ensemble_path = PROJECT_ROOT / "models" / "ensemble_models.joblib"
 
     if not model_path.exists() or not preproc_path.exists():
         st.error(
@@ -104,7 +465,7 @@ def get_predictor() -> RiskPredictor:
     return RiskPredictor(
         model_path=model_path,
         preprocessor_path=preproc_path,
-        ensemble_path=ensemble_path if ensemble_path.exists() else None,
+        ensemble_path=None,
     )
 
 
@@ -112,9 +473,9 @@ def get_predictor() -> RiskPredictor:
 with st.sidebar:
     st.markdown(
         """
-        <div style="padding: 10px 0 15px 0; text-align: left;">
-            <h3 style="margin: 0; color: #1e3a8a; font-weight: 800;">🩺 CardioMetabolic AI</h3>
-            <p style="margin: 2px 0 0 0; color: #64748b; font-size: 0.85rem;">Deep Learning Risk Analytics</p>
+        <div class="sidebar-brand-card">
+            <h3 class="sidebar-brand-title">🩺 CardioMetabolic AI</h3>
+            <p class="sidebar-brand-sub">Deep Learning Risk Analytics</p>
         </div>
         """,
         unsafe_allow_html=True,
@@ -127,23 +488,14 @@ with st.sidebar:
     )
 
     st.markdown("---")
-    st.markdown("#### Model Engine Configuration")
-
-    model_choice = st.selectbox(
-        "Active Inference Architecture:",
-        options=["Multi-Output Neural Network (Primary)", "XGBoost + LightGBM Ensemble"],
-        index=0,
-    )
-    use_ensemble = "Ensemble" in model_choice
-
-    st.markdown("---")
     st.markdown(
         """
-        <div style="font-size: 0.82rem; color: #64748b;">
+        <div class="sidebar-info-box">
+            <p><strong>Architecture:</strong> Multi-Output Deep Neural Network</p>
             <p><strong>Dataset:</strong> UCI ML Repo (ID: 336)</p>
             <p><strong>Framework:</strong> TensorFlow / Keras 2.21</p>
             <p><strong>Environment:</strong> Windows 10/11 x64</p>
-            <p><strong>Status:</strong> <span style="color: #10b981; font-weight: 600;">● Model Loaded & Ready</span></p>
+            <p style="margin-top: 8px;"><strong>Status:</strong> <span class="sidebar-status-badge"><span class="sidebar-status-dot"></span> Model Loaded & Ready</span></p>
         </div>
         """,
         unsafe_allow_html=True,
@@ -155,7 +507,7 @@ st.markdown(
     """
     <div class="hero-banner">
         <h1>Diabetes Risk Prediction System</h1>
-        <p>Production Deep Learning and Ensemble Architecture for Simultaneous Diabetes & Hypertension Risk Assessment</p>
+        <p>Production Deep Learning Architecture for Simultaneous Diabetes & Hypertension Risk Assessment</p>
     </div>
     """,
     unsafe_allow_html=True,
@@ -191,7 +543,7 @@ if page == "Overview":
             ### Key Engineering Highlights
             * **Simultaneous Multi-Output Deep Learning:** A single neural network model trained with dual sigmoid classification heads for multi-task predictive synergy.
             * **Leakage-Free Preprocessing:** Fitted strictly on training folds with clinical decimal-shift corrections (`sod`, `pot`), robust missingness encoding, and Gaussian quantile normalization.
-            * **Dual Inference Pipeline:** Seamless support for both Deep Neural Networks and Optuna-calibrated Gradient Boosting Ensembles (XGBoost + LightGBM).
+            * **Calibrated Decision Boundaries:** Optimal thresholding tailored for high sensitivity and balanced clinical classification.
             * **Zero Online Retraining:** Production-ready inference loading serialized preprocessors and weights instantaneously.
             """
         )
@@ -241,7 +593,7 @@ elif page == "Risk Assessment":
 
         with st.spinner("Executing neural inference and evaluating biomarkers..."):
             try:
-                prediction_result = predictor.predict(patient_data, use_ensemble=use_ensemble)
+                prediction_result = predictor.predict(patient_data, use_ensemble=False)
             except Exception as e:
                 st.error(f"Inference Error: {str(e)}")
                 st.stop()
@@ -269,41 +621,24 @@ elif page == "Risk Assessment":
                 threshold=htn_info["threshold"],
                 prediction=htn_info["prediction"],
                 risk_level=htn_info["risk_level"],
-                icon="🫀",
+                icon="❤️",
             )
 
-        # Biomarker Summary Callouts
-        st.markdown("#### Clinical Telemetry & Trigger Signals")
-        triggers = []
-        if patient_data.get("bgr", 0) >= 140.0:
-            triggers.append(f"• **Elevated Blood Glucose:** Random glucose is {patient_data['bgr']} mg/dL (Clinical hyperglycemia threshold: >= 140 mg/dL).")
-        if patient_data.get("bp", 0) >= 90.0:
-            triggers.append(f"• **Elevated Diastolic BP:** Resting blood pressure is {patient_data['bp']} mm Hg (Hypertension threshold: >= 90 mm Hg).")
-        if patient_data.get("su", 0) > 0:
-            triggers.append(f"• **Glucosuria:** Detected urinary glucose grade is {int(patient_data['su'])}/5.")
-        if patient_data.get("hemo", 15) < 12.0:
-            triggers.append(f"• **Clinical Anemia:** Hemoglobin level is {patient_data['hemo']} g/dL (< 12 g/dL indicates anemia).")
-        if patient_data.get("sc", 0) > 1.4:
-            triggers.append(f"• **Renal Stress:** Serum creatinine is {patient_data['sc']} mg/dL (Normal: 0.6 - 1.3 mg/dL).")
-
-        if triggers:
-            for t in triggers:
-                st.warning(t)
-        else:
-            st.success("• **All Primary Biomarkers Within Standard Baseline Limits.** No acute metabolic alert signals detected.")
+        st.markdown("---")
+        st.subheader("Laboratory Biomarker Reference & Risk Map")
+        render_feature_radar(patient_data)
 
 
 # -------------------------------------------------------------
 # PAGE 3: MODEL PERFORMANCE
 # -------------------------------------------------------------
 elif page == "Model Performance":
-    st.header("Model Evaluation & Experimental Benchmarks")
-    st.write("Rigorous quantitative metrics evaluated on the 20% held-out test split (N=80 patients).")
+    st.header("Model Evaluation & Diagnostics")
+    st.write("Comprehensive validation metrics evaluated on an independent 20% stratified test split.")
 
-    metrics_file = PROJECT_ROOT / "reports" / "results" / "metrics.json"
-
-    if metrics_file.exists():
-        with open(metrics_file, "r", encoding="utf-8") as f:
+    metrics_path = PROJECT_ROOT / "reports" / "results" / "metrics.json"
+    if metrics_path.exists():
+        with open(metrics_path, "r", encoding="utf-8") as f:
             metrics_data = json.load(f)
 
         render_metrics_table(metrics_data)
@@ -325,7 +660,7 @@ elif page == "Model Performance":
     with tab2:
         cm_img_path = PROJECT_ROOT / "reports" / "figures" / "confusion_matrices.png"
         if cm_img_path.exists():
-            st.image(str(cm_img_path), caption="Confusion Matrices across Neural Network and Tree Ensembles", use_container_width=True)
+            st.image(str(cm_img_path), caption="Confusion Matrices for Multi-Output Neural Network", use_container_width=True)
         else:
             st.warning("Confusion matrix figure not found.")
 
