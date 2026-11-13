@@ -11,10 +11,30 @@ import streamlit as st
 
 # Setup sys.path for local modular imports
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
-sys.path.insert(0, str(PROJECT_ROOT / "src"))
+APP_DIR = Path(__file__).resolve().parent
 
-from app.components.input_form import render_input_form
-from app.components.visualizations import render_feature_radar, render_metrics_table, render_risk_card
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
+if str(PROJECT_ROOT / "src") not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT / "src"))
+if str(APP_DIR) not in sys.path:
+    sys.path.insert(0, str(APP_DIR))
+
+try:
+    from app.components.input_form import render_input_form
+    from app.components.visualizations import (
+        render_feature_radar,
+        render_metrics_table,
+        render_risk_card,
+    )
+except (ImportError, ModuleNotFoundError):
+    from components.input_form import render_input_form
+    from components.visualizations import (
+        render_feature_radar,
+        render_metrics_table,
+        render_risk_card,
+    )
+
 from diabetes_prediction.predict import RiskPredictor
 
 # Page Configuration
